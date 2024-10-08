@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Project</title>
+</head>
+<body>
+    <h1>Edit Project</h1>
+    <form action="{{ url_for('edit_project', project_id=project['project_id']) }}" method="post" enctype="multipart/form-data">
+        <label for="project_name">Project Name:</label>
+        <input type="text" id="project_name" name="project_name" value="{{ project['project_name'] }}" required><br><br>
+        
+        <label for="other_name">Other Name:</label>
+        <input type="text" id="other_name" name="other_name" value="{{ project['other_name'] }}"><br><br>
+        
+        <label for="major">Major:</label>
+        <input type="text" id="major" name="major" value="{{ project['major'] }}"><br><br>
+        
+        <label for="thai_keywords">Thai Keywords:</label>
+        <input type="text" id="thai_keywords" name="thai_keywords" value="{{ project['thai_keywords'] }}"><br><br>
+        
+        <label for="english_keywords">English Keywords:</label>
+        <input type="text" id="english_keywords" name="english_keywords" value="{{ project['english_keywords'] }}"><br><br>
+        
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year" value="{{ project['year'] }}"><br><br>
+        
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" name="publisher" value="{{ project['publisher'] }}"><br><br>
+        
+        <label for="abstract">Abstract:</label>
+        <textarea id="abstract" name="abstract">{{ project['abstract'] }}</textarea><br><br>
+        
+        <label for="file_path">File:</label>
+        <input type="file" id="file_path" name="file_path"><br><br>
+        
+        <label for="authors">Authors:</label>
+        <div id="authors">
+            {% for author_name in project['author_names'] %}
+                <input type="text" name="authors[]" value="{{ author_name }}"><br>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addAuthor()">Add Author</button><br><br>
+        
+        <label for="advisors">Advisors:</label>
+        <div id="advisors">
+            {% for advisor_name in project['advisor_names'] %}
+                <input type="text" name="advisors[]" value="{{ advisor_name }}"><br>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addAdvisor()">Add Advisor</button><br><br>
+        
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <script>
+        function addAuthor() {
+            var div = document.getElementById('authors');
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'authors[]';
+            div.appendChild(input);
+            div.appendChild(document.createElement('br'));
+        }
+
+        function addAdvisor() {
+            var div = document.getElementById('advisors');
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'advisors[]';
+            div.appendChild(input);
+            div.appendChild(document.createElement('br'));
+        }
+    </script>
+</body>
+</html>

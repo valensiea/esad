@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Information Form</title>
+</head>
+<body>
+    <h1>Thesis Information Form</h1>
+    <form id="thesisForm">
+        <label for="text">Input Text:</label><br>
+        <textarea id="text" name="text" rows="10" cols="50"></textarea><br><br>
+        
+        <label for="title_th">ชื่อปริญญานิพนธ์:</label><br>
+        <input type="text" id="title_th" name="title_th"><br><br>
+        
+        <label for="title_en">ชื่อปริญญานิพนธ์ภาษาอังกฤษ:</label><br>
+        <input type="text" id="title_en" name="title_en"><br><br>
+        
+        <label for="authors">ผู้จัดทำ:</label><br>
+        <input type="text" id="authors" name="authors"><br><br>
+        
+        <label for="advisors">อาจารย์ที่ปรึกษา:</label><br>
+        <input type="text" id="advisors" name="advisors" style="width: 800%;"><br><br>
+        
+        <label for="co_advisors">อาจารย์ที่ปรึกษาร่วม:</label><br>
+        <input type="text" id="co_advisors" name="co_advisors"><br><br>
+
+        <label for="degree">สาขา:</label><br>
+        <select id="degree" name="degree">
+            <option value="เทคโนโลยีสารสนเทศ">เทคโนโลยีสารสนเทศ</option>
+            <option value="วิทยาการคอมพิวเตอร์">วิทยาการคอมพิวเตอร์</option>
+            <!-- Add other options as needed -->
+        </select><br><br>
+        
+        <label for="year">ปีการศึกษา:</label><br>
+        <input type="text" id="year" name="year"><br><br>
+        
+        <label for="abstract">บทคัดย่อ:</label><br>
+        <textarea id="abstract" name="abstract" rows="10" cols="50"></textarea><br><br>
+        
+        <label for="keywords_th">คำสำคัญภาษาไทย:</label><br>
+        <input type="text" id="keywords_th" name="keywords_th"><br><br>
+        
+        <label for="keywords_en">คำสำคัญภาษาอังกฤษ:</label><br>
+        <input type="text" id="keywords_en" name="keywords_en"><br><br>
+    </form>
+
+    <script>
+        function extractAndFill() {
+            const text = document.getElementById('text').value;
+            const data = text.trim().split('\n');
+
+            if (data.length < 7) {
+                return;
+            }
+
+            const title_th = data[0].replace('ชื่อปริญญานิพนธ์ ', '').trim();
+            const title_en = data[1].trim();
+            const authors = data[2].replace('ผู้จัดทำ ', '').trim();
+            const advisorsFull = data[3].replace('อาจารย์ที่ปรึกษา ', '').trim();
+            let advisors, co_advisors;
+            if (advisorsFull.includes('(ที่ปรึกษาร่วม)')) {
+                [advisors, co_advisors] = advisorsFull.split('(ที่ปรึกษาร่วม)').map(s => s.trim()).filter(s => s !== '');
+            } else {
+                advisors = advisorsFull;
+                co_advisors = '';
+            }
+            const degree_text = data[4].replace('ชื่อปริญญา ', '').trim();
+            const year = data[5].replace('ปีการศึกษา ', '').trim();
+            const abstractSection = data.slice(6).join(' ').replace('บทคัดย่อ ', '');
+            const [abstract, keywordsPart] = abstractSection.split('คำสำคัญ');
+            const keywords_th = keywordsPart.split(':')[1].split('Keyword')[0].trim();
+            const keywords_en = keywordsPart.split('Keyword')[1].split(':')[1].trim();
+
+            document.getElementById('title_th').value = title_th;
+            document.getElementById('title_en').value = title_en;
+            document.getElementById('authors').value = authors;
+            document.getElementById('advisors').value = advisors;
+            document.getElementById('co_advisors').value = co_advisors;
+            document.getElementById('year').value = year;
+            document.getElementById('abstract').value = abstract;
+            document.getElementById('keywords_th').value = keywords_th;
+            document.getElementById('keywords_en').value = keywords_en;
+
+            // Set the degree select option based on the extracted degree
+            const degreeSelect = document.getElementById('degree');
+            if (degree_text.includes('เทคโนโลยีสารสนเทศ')) {
+                degreeSelect.value = 'เทคโนโลยีสารสนเทศ';
+            } else if (degree_text.includes('วิทยาการคอมพิวเตอร์')) {
+                degreeSelect.value = 'วิทยาการคอมพิวเตอร์';
+            } else {
+                degreeSelect.value = ''; // Default to empty if no match
+            }
+        }
+
+        document.getElementById('text').addEventListener('input', extractAndFill);
+    </script>
+</body>
+</html>
